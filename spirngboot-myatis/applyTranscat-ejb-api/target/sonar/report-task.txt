@@ -1,0 +1,6 @@
+projectKey=com.ule.if.vpsLoan:applyTransact-ejb-api
+serverUrl=http://sonarqube.uletm.com/sonar
+serverVersion=7.5.0.20543
+dashboardUrl=http://sonarqube.uletm.com/sonar/dashboard?id=com.ule.if.vpsLoan%3AapplyTransact-ejb-api
+ceTaskId=AXJOusRyrRoHTXaFlTxP
+ceTaskUrl=http://sonarqube.uletm.com/sonar/api/ce/task?id=AXJOusRyrRoHTXaFlTxP

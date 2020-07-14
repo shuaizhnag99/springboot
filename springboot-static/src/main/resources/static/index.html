@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>this is static file</title>
+</head>
+<body>
+<p>hello word this is static file in <br>
+     src>main>resources>static</p>
+<hr>
+<p>Spring Boot 默认将 /** 所有访问映射到以下目录：<br>
+classpath:/static<br>
+classpath:/public<br>
+classpath:/resources<br>
+classpath:/META-INF/resources<br>
+spring.resources.static-locations：在这里配置静态资源路径，前面说了这里的配置是覆盖默认配置，<br>
+所以需要将默认的也加上否则static、public等这些路径将不能被当作静态资源路径，<br>
+在这个最末尾的file:${web.upload-path}之所有要加file:是因为指定的是一个具体的硬盘路径，<br>
+其他的使用classpath指的是系统环境变量
+ 
+
+</p>
+</body>
+</html>

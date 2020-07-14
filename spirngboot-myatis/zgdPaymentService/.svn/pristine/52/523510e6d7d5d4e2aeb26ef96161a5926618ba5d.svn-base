@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ule.uhj.app.zgd.dao.PowerMapper" >
+
+    <resultMap id="ParameterMap" type="com.ule.uhj.Dcoffee.object.model.inner.util.Parameter">
+        <result column="map_name" property="parameterName" jdbcType="VARCHAR"/>
+        <result column="map_type" property="parameterTypeString" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="SourceMap" type="com.ule.uhj.Dcoffee.object.model.inner.source.DefaultSource">
+        <id column="ID" property="ID" jdbcType="VARCHAR"/>
+        <result column="source_name" property="sourceName" jdbcType="VARCHAR"/>
+        <result column="source_type" property="sourceType" jdbcType="VARCHAR"/>
+        <result column="descriptor" property="descriptor" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="source_level" property="sourceLevel" jdbcType="DECIMAL"/>
+        <result column="virtual_table" property="prepareSql" jdbcType="VARBINARY" javaType="String"/>
+    </resultMap>
+
+    <resultMap id="SlotMap" type="com.ule.uhj.Dcoffee.object.model.inner.connector.DefaultSlot">
+        <id column="ID" property="ID" jdbcType="VARCHAR"/>
+        <result column="slot_name" property="slotName" jdbcType="VARCHAR"/>
+        <result column="slot_type" property="slotType" jdbcType="VARCHAR"/>
+        <result column="map_name" property="mapName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="DataSetMap" type="com.ule.uhj.Dcoffee.object.model.inner.dataSet.DefaultDataSet">
+        <id column="ID" property="ID" jdbcType="VARCHAR"/>
+        <result column="data_name" property="name" jdbcType="VARCHAR"/>
+        <result column="support" property="support" jdbcType="VARCHAR"/>
+        <result column="descriptor" property="descriptor" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="FilterMap" type="com.ule.uhj.Dcoffee.core.adapter.FilterBean">
+        <id column="ID" property="ID" jdbcType="VARCHAR"/>
+        <result column="DATASET_ID" property="dataSetId" jdbcType="VARCHAR"/>
+        <result column="filter_code" property="executeCodeByte" jdbcType="BLOB"/>
+        <result column="filter_level" property="level" jdbcType="DECIMAL"/>
+        <result column="filter_type" property="type" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="FieldObjMap" type="com.ule.uhj.app.zgd.model.FieldObj">
+        <id column="ID" property="ID" jdbcType="VARCHAR"/>
+        <result column="FIELD_NAME" property="fieldName" jdbcType="VARCHAR"/>
+        <result column="FIELD_TYPE" property="fieldType" jdbcType="VARCHAR"/>
+        <result column="FIELD_ID" property="fieldId" jdbcType="VARCHAR"/>
+        <result column="FIELD_DESC" property="filedDesc" jdbcType="VARCHAR"/>
+        <result column="FIELD_WIDTH" property="fieldWidth" jdbcType="DECIMAL"/>
+        <result column="FIELD_TRANSLATE" property="translate" jdbcType="VARCHAR"/>
+        <result column="FILED_REQUIRED" property="required" jdbcType="VARCHAR"/>
+        <result column="FILED_READONLY" property="readOnly" jdbcType="VARCHAR"/>
+        <result column="FIELD_SORT" property="sort" jdbcType="DECIMAL"/>
+        <result column="FIELD_BIND" property="bind" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertCode" parameterType="java.util.Map">
+        insert into
+        uleapp_financecr.t_j_forecast_business_code
+        ( word , code )
+        values
+        (
+        #{word,jdbcType=VARCHAR},
+        #{code,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertResult" parameterType="java.util.Map">
+        insert into
+        uleapp_financecr.t_j_forecast_business_result
+        ( business , user_only_id, create_time,code )
+        values
+        (
+        #{business,jdbcType=VARCHAR},
+        #{userOnlyId,jdbcType=VARCHAR},
+        #{createTime,jdbcType=VARCHAR},
+        #{code,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="selectCodeSeq" resultType="java.lang.String">
+        select uleapp_financecr.t_j_forecast_business_code_seq.nextval from dual
+    </select>
+
+    <select id="selectCode" parameterType="java.lang.String" resultType="java.util.Map">
+        select code from uleapp_financecr.t_j_forecast_business_code where word = #{word}
+    </select>
+
+    <select id="selectCodeByWord" parameterType="java.util.Map" resultType="java.util.Map">
+        select * from uleapp_financecr.t_j_forecast_business_code where word LIKE '%${word}%'
+    </select>
+
+    <select id="getDataSetById" parameterType="java.util.Map" resultMap="DataSetMap">
+        SELECT * FROM
+        ULEAPP_FINANCECR.T_J_DCOFFEE_DATASET T
+        WHERE 1=1
+        <if test="id != null">
+            AND
+            T.ID = #{id,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getDataSetBySupport" parameterType="java.util.Map" resultMap="DataSetMap">
+        SELECT * FROM
+        ULEAPP_FINANCECR.T_J_DCOFFEE_DATASET T
+        WHERE 1=1
+        <if test="support != null">
+            AND
+            T.support = #{support,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getSourcesByDatasetId" parameterType="java.lang.String" resultMap="SourceMap">
+        SELECT * FROM ULEAPP_FINANCECR.T_J_DCOFFEE_SOURCE T
+        LEFT JOIN ULEAPP_FINANCECR.T_J_DCOFFEE_SOURCE_REL_DATASET T2 ON  T.ID = T2.SOURCE_ID
+        WHERE T2.DATASET_ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getSlotsBySourceId" parameterType="java.lang.String" resultMap="SlotMap">
+        SELECT T.*,T2.map_name FROM ULEAPP_FINANCECR.T_J_DCOFFEE_SLOT T
+        LEFT JOIN ULEAPP_FINANCECR.T_J_DCOFFEE_SOURCE_REL_SLOT T2 ON T.ID = T2.SLOT_ID
+        WHERE T2.SOURCE_ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getParameterMapsBySourceId" parameterType="java.lang.String" resultMap="ParameterMap">
+        SELECT T.* FROM ULEAPP_FINANCECR.T_J_DCOFFEE_PARAMETER T
+        LEFT JOIN ULEAPP_FINANCECR.T_J_DCOFFEE_SOURCE_REL_DATASET T2 ON T.REL_ID = T2.ID
+        WHERE T2.SOURCE_ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getFilterByDataSetId" parameterType="java.lang.String" resultMap="FilterMap">
+        select t.id, t.dataset_id, t.filter_code, t.filter_level, t.filter_type
+        from ULEAPP_FINANCECR.t_j_Dcoffee_Filter t
+        where t.dataset_id =#{dataSetId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getDataSetDescriptorById" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT t.DATA_NAME FROM ULEAPP_FINANCECR.T_J_DCOFFEE_DATASET t WHERE t.ID = #{dataSetId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getFieldObjByDataSetId" parameterType="java.util.Map" resultMap="FieldObjMap">
+        SELECT T1.*,T2.FILED_REQUIRED,T2.FILED_READONLY,T2.FIELD_SORT
+        FROM
+        ULEAPP_FINANCECR.T_J_DCOFFEE_MGT_FIELD T1 LEFT JOIN ULEAPP_FINANCECR.T_J_DCOFFEE_DATASET_REL_FIELD T2
+        ON T1.ID = T2.FIELD_ID
+        WHERE
+        T2.DATASET_ID = #{dataSetId,jdbcType=VARCHAR}
+        <if test="bind != null">
+            AND
+            T1.FIELD_BIND LIKE '%'||#{bind,jdbcType=VARCHAR}||'%'
+        </if>
+    </select>
+
+    <insert id="keepWarm" parameterType="java.util.Map">
+        <selectKey keyProperty="ID" resultType="String" order="BEFORE">
+            select ULEAPP_FINANCECR.SEQ_T_J_INTERFACE_ACCESS_INFO.nextval from dual
+        </selectKey>
+        insert INTO ULEAPP_FINANCECR.T_J_DCOFFEE_RESULT T
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ID != null">
+                ID,
+            </if>
+            <if test="DATASET_ID != null">
+                DATASET_ID,
+            </if>
+            <if test="SQL_EXE != null">
+                SQL_EXE,
+            </if>
+            <if test="SUCCESS != null">
+                SUCCESS,
+            </if>
+            <if test="COFFEE_BEAN != null">
+                COFFEE_BEAN,
+            </if>
+            <if test="RESULT_SIZE != null">
+                RESULT_SIZE,
+            </if>
+            <if test="CREATE_TIME != null">
+                CREATE_TIME,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ID != null">
+                #{ID,jdbcType=VARCHAR},
+            </if>
+            <if test="DATASET_ID != null">
+                #{DATASET_ID,jdbcType=VARCHAR},
+            </if>
+            <if test="SQL_EXE != null">
+                #{SQL_EXE,jdbcType=BLOB},
+            </if>
+            <if test="SUCCESS != null">
+                #{SUCCESS,jdbcType=DECIMAL},
+            </if>
+            <if test="COFFEE_BEAN != null">
+                #{COFFEE_BEAN,jdbcType=BLOB},
+            </if>
+            <if test="RESULT_SIZE != null">
+                #{RESULT_SIZE,jdbcType=DECIMAL},
+            </if>
+            <if test="CREATE_TIME != null">
+                #{CREATE_TIME,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

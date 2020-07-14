@@ -1,0 +1,20 @@
+package com.ule.uhj.sldProxy.service;
+
+
+import com.ule.uhj.sld.model.TransZx;
+
+import java.util.List;
+
+/**
+ * 征信接口缓存
+ * Created by yfzx-sh-zhengxin on 2016/7/7.
+ */
+public interface TransZxService {
+    /***
+     * 查询征信缓存
+     * @param transCode
+     * @param paramers
+     * @return
+     */
+    TransZx findTransZxInfo(String transCode,List<Object> paramers);
+}

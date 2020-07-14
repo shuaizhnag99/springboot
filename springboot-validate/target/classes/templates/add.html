@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body class="container">
+<br/>
+<h1>添加用户</h1>
+<br/><br/>
+<div class="with:80%">
+  <form th:action="@{/add}" method="post">
+     姓名<input  id = "name" name="name" type="text" th:value="${person.name}"/>
+     <p th:if="${#fields.hasErrors('person.name')}" th:errors="${person.name}"></p>
+     <br>
+    性别<input id="sex" name="sex" type="text"  th:value="${person.sex}" />
+    <p th:if="${#fields.hasErrors('person.sex')}" th:errors="${person.sex}"></p>
+    <br>
+    年龄<input id="age"  name="age" type="text" th:value="${person.age}"  />
+    <p th:if="${#fields.hasErrors('person.age')}" th:errors="${person.age}"></p><br>
+    
+    密码<input id="password" name="password" type="text" th:value="${person.password}" />
+    <p th:if="${#fields.hasErrors('person.password')}" th:errors="${person.password}"></p><br>
+  <button>新增提交</button>
+  </form>
+</div>
+ 
+
+</body>
+</html>

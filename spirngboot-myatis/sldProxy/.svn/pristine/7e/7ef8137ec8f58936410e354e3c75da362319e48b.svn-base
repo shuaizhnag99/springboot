@@ -1,0 +1,15 @@
+jdbc.internet_finance-master.url=jdbc:mysql://172.25.201.63:3306/internet_finance?autoReconnect=true&autoReconnectForPools=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+jdbc.internet_finance-master.username=uleapp_itfin
+jdbc.internet_finance-master.password=itfin.2016!A
+jdbc.internet_finance-master.initialSize=5
+jdbc.internet_finance-master.maxActive=100
+jdbc.internet_finance-master.maxIdle=5
+jdbc.internet_finance-master.minIdle=1
+
+jdbc.financecr-master.url=jdbc:oracle:thin:@//172.25.201.211:1521/ULE_FINANCECR.APP
+jdbc.financecr-master.username=ULEAPP_FINANCECR
+jdbc.financecr-master.password=financecr.2015
+jdbc.financecr-master.initialSize=5
+jdbc.financecr-master.maxActive=100
+jdbc.financecr-master.maxIdle=5
+jdbc.financecr-master.minIdle=1

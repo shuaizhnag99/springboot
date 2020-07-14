@@ -1,0 +1,11 @@
+GLOBAL_SERVER=https://i1.testing.ule.com
+#UHJ_CSS_SERVER=https://secure.testing.ule.com
+UHJ_CSS_SERVER=https://i1.testing.ule.com
+UHJ_SERVER=https://money.testing.ule.com/lendvps
+#UHJ_SERVER=http://localhost:8081/lendvps
+UHJ_CSS_SERVER_HTTP=http://i1.testing.ule.com
+#
+UZS_STATIC_RESOURCES_HTTP=http://www.testing.ule.com
+UHJ_SERVER_HTTP=http://money.testing.ule.com/lendvps
+#\u90ae\u52a9\u624b\u4efb\u52a1\u5217\u8868
+CP_HELPER_TASK=http://ule.cn/afzgrf

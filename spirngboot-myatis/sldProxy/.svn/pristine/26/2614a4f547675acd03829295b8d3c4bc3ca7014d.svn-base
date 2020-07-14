@@ -1,0 +1,32 @@
+package com.ule.uhj.sldProxy.util;
+
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+public class SldConfig {
+	
+	private SldConfig(){}
+	
+	private static Properties p = new Properties();
+	
+	static {
+		init();
+	}
+	
+	private static void init(){
+		InputStream inputStream = SldConfig.class.getResourceAsStream("/sldConfig.properties");
+		try {
+			p.load(inputStream);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	public static String getProperty(String key){
+		return p.getProperty(key);
+	}
+	
+	
+}

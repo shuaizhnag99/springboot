@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="callSettersOnNulls" value="true"/>
+		<setting name="cacheEnabled" value="true" />
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="useColumnLabel" value="true" />
+		<setting name="useGeneratedKeys" value="false" />
+		<setting name="autoMappingBehavior" value="PARTIAL" />
+		<setting name="defaultExecutorType" value="SIMPLE" /> <!-- BATCH, REUSE -->
+		<setting name="defaultStatementTimeout" value="25000" />
+		<setting name="safeRowBoundsEnabled" value="false" />
+		<setting name="mapUnderscoreToCamelCase" value="false" />
+		<setting name="localCacheScope" value="SESSION" />
+		<setting name="jdbcTypeForNull" value="OTHER" />
+		<setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString" />
+	</settings>
+<!-- 	<plugins> -->
+<!--     	<plugin interceptor="com.ule.uhj.mybatis.PageInterceptor"></plugin> -->
+<!-- 	</plugins> -->
+<!-- 	<typeAliases> -->
+<!-- 		<typeAlias alias="UserEntity" type="com.ule.uhj.user.model.UserEntity" /> -->
+		<!-- 批量指定别名，别名即类名，首字母大写小写都可以 -->
+<!-- 		<package name="com.ule.uhj.entity"/> -->
+<!-- 	</typeAliases> -->
+<!-- 	<mappers> -->
+<!-- 		<package name="com.ule.uhj.auth.xml"/> -->
+<!-- 		<mapper resource="com.ule.uhj.auth.xml.AuthMapper.xml" /> -->
+<!-- 		<mapper resource="com.ule.uhj.auth.xml.UhjUserAuthMapper.xml" /> -->
+<!-- 		<mapper resource="com.ule.uhj.auth.xml.UhjUserMapper.xml" /> -->
+<!-- 	</mappers> -->
+</configuration>	

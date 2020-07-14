@@ -1,0 +1,13 @@
+package com.ule.uhj.ejb.client.ycZgd;
+
+import javax.ejb.Remote;
+
+import com.ule.wildfly.annotation.BeanName;
+
+@Remote
+@BeanName("YCZgdInterfaceBean")
+public interface YCZgdInterfaceClient {
+	
+	public void queryLprAndUpdateConstant(String effDate);
+
+}

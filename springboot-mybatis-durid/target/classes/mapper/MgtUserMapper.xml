@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.boot.mapper.MgtUserMapper">
+  <resultMap id="BaseResultMap" type="MgtUser">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="userId" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="userName" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="registDate" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="activeDate" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="updateDate" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="loginStatus" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accountStatus" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="permissions" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="accountType" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="realName" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="mobilePhone" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userId, userName, password, registDate, activeDate, updateDate, loginStatus, 
+    accountStatus, permissions, accountType, realName, mobilePhone
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_U_MGT_USER
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from T_U_MGT_USER
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="MgtUser">
+    insert into T_U_MGT_USER (id, userId, userName, 
+      password, registDate, activeDate, 
+      updateDate, loginStatus, accountStatus, 
+      permissions, accountType, realName, 
+      mobilePhone)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{registdate,jdbcType=VARCHAR}, #{activedate,jdbcType=VARCHAR}, 
+      #{updatedate,jdbcType=VARCHAR}, #{loginstatus,jdbcType=VARCHAR}, #{accountstatus,jdbcType=VARCHAR}, 
+      #{permissions,jdbcType=INTEGER}, #{accounttype,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR}, 
+      #{mobilephone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="MgtUser">
+    insert into T_U_MGT_USER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="username != null">
+        userName,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="registdate != null">
+        registDate,
+      </if>
+      <if test="activedate != null">
+        activeDate,
+      </if>
+      <if test="updatedate != null">
+        updateDate,
+      </if>
+      <if test="loginstatus != null">
+        loginStatus,
+      </if>
+      <if test="accountstatus != null">
+        accountStatus,
+      </if>
+      <if test="permissions != null">
+        permissions,
+      </if>
+      <if test="accounttype != null">
+        accountType,
+      </if>
+      <if test="realname != null">
+        realName,
+      </if>
+      <if test="mobilephone != null">
+        mobilePhone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="registdate != null">
+        #{registdate,jdbcType=VARCHAR},
+      </if>
+      <if test="activedate != null">
+        #{activedate,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedate != null">
+        #{updatedate,jdbcType=VARCHAR},
+      </if>
+      <if test="loginstatus != null">
+        #{loginstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="accountstatus != null">
+        #{accountstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="permissions != null">
+        #{permissions,jdbcType=INTEGER},
+      </if>
+      <if test="accounttype != null">
+        #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilephone != null">
+        #{mobilephone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="MgtUser">
+    update T_U_MGT_USER
+    <set>
+      <if test="userid != null">
+        userId = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        userName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="registdate != null">
+        registDate = #{registdate,jdbcType=VARCHAR},
+      </if>
+      <if test="activedate != null">
+        activeDate = #{activedate,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedate != null">
+        updateDate = #{updatedate,jdbcType=VARCHAR},
+      </if>
+      <if test="loginstatus != null">
+        loginStatus = #{loginstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="accountstatus != null">
+        accountStatus = #{accountstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="permissions != null">
+        permissions = #{permissions,jdbcType=INTEGER},
+      </if>
+      <if test="accounttype != null">
+        accountType = #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        realName = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilephone != null">
+        mobilePhone = #{mobilephone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="MgtUser">
+    update T_U_MGT_USER
+    set userId = #{userid,jdbcType=VARCHAR},
+      userName = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      registDate = #{registdate,jdbcType=VARCHAR},
+      activeDate = #{activedate,jdbcType=VARCHAR},
+      updateDate = #{updatedate,jdbcType=VARCHAR},
+      loginStatus = #{loginstatus,jdbcType=VARCHAR},
+      accountStatus = #{accountstatus,jdbcType=VARCHAR},
+      permissions = #{permissions,jdbcType=INTEGER},
+      accountType = #{accounttype,jdbcType=VARCHAR},
+      realName = #{realname,jdbcType=VARCHAR},
+      mobilePhone = #{mobilephone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+   <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_U_MGT_USER   
+  </select>
+</mapper>

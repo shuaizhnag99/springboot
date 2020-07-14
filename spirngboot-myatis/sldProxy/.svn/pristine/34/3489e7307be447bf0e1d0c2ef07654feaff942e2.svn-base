@@ -1,0 +1,172 @@
+package com.ule.uhj.tmp.service.impl;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ule.search.rtse.client.dto.SearchResultDto;
+import com.ule.search.rtse.client.search.SearchService;
+import com.ule.search.rtse.client.search.query.BooleanFilter;
+import com.ule.search.rtse.client.search.query.BooleanQuery;
+import com.ule.search.rtse.client.search.query.RangeFilter;
+import com.ule.search.rtse.client.search.query.TermQuery;
+import com.ule.uhj.sldProxy.util.PropertiesHelper;
+import com.ule.uhj.tmp.dao.ZgSmsMapper;
+import com.ule.uhj.tmp.model.ZgSms;
+import com.ule.uhj.tmp.service.ZgSmsService;
+
+@Service("zgSmsService")
+public class ZgSmsServiceImpl implements ZgSmsService {
+
+	private static Logger log = LoggerFactory.getLogger(ZgSmsServiceImpl.class);
+	
+	@Autowired
+	private ZgSmsMapper zgSmsMapper;
+	
+	public String saveSyncFromCse(){
+		try {
+			//查询zgsms表中 最大的id maxDbId
+			Long maxCollectionTime = zgSmsMapper.selectMaxCollectionTime();
+			log.info(String.format("db max collection time : %s", maxCollectionTime));
+			//查询搜索中id大于 maxDbId 的sms数据
+			Collection<Map> smsmap = querySMSFromCSE(maxCollectionTime);
+			log.info(String.format("query sms from cse size : %s", smsmap.size()));
+			//数据入库
+			saveRiskSmss(smsmap);
+			return String.format("{\"code\":\"0000\",\"msg\":\"入库%s条\"}", smsmap.size());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return String.format("{\"code\":\"9999\",\"msg\":\"入库失败:%s\"}", e.getMessage());
+		}
+	}
+
+	private Collection<Map> querySMSFromCSE(Long maxCollectionTime) {
+		// 云搜索服务IP和端口
+		SearchService searchService = new SearchService(PropertiesHelper.getSldProxyCommon("coludSearchIP"), 
+				Integer.parseInt(PropertiesHelper.getSldProxyCommon("coludSearchPort")));
+		BooleanQuery query = new BooleanQuery();
+
+		long s = System.currentTimeMillis();
+
+		BooleanQuery typeQuery = new BooleanQuery();
+		typeQuery.add(new TermQuery("type", "sms"), BooleanQuery.Occur.MUST);
+		query.add(typeQuery, BooleanQuery.Occur.MUST);
+
+//		BooleanQuery maxIdQuery = new BooleanQuery();
+//		maxIdQuery.add(new TermQuery("id", "sms"), BooleanQuery.Occur.MUST);
+//		query.add(maxIdQuery, BooleanQuery.Occur.MUST);
+		
+		Long[] range = getRange(maxCollectionTime);
+		BooleanFilter filter = new BooleanFilter();
+		filter.add(new RangeFilter("collection_time", range[0], range[1]));
+
+		String returnFields = "id,sms_phonenumber,sms_itype,sms_name,sms_smsbody,sms_ldate,collection_time,user_only_id,phone";
+		log.info("query: " + query.buildQueryString());
+		// 按数据统计日期升序排序
+		String sort = "id asc";
+		Set<Map> r = new HashSet<Map>();
+		int single = 1000;
+		SearchResultDto sr = searchService.search(PropertiesHelper.getSldProxyCommon("riskAppkey"), 
+				PropertiesHelper.getSldProxyCommon("riskIndexName"), query, returnFields, 0, single, filter, sort);
+		if (sr.getResultList() != null && sr.getResultList().size() > 0) {
+			r.addAll(sr.getResultList());
+		}
+		return r;
+	}
+	
+	/**
+	 * 风险短信入库
+	 * @param smsmap
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("rawtypes")
+	private void saveRiskSmss(Collection<Map> smsmap) throws Exception{
+		long l1 = System.currentTimeMillis();
+		//解析生成SmsHitRisk
+		List<ZgSms> smss = new ArrayList<ZgSms>();
+		if(smsmap != null && smsmap.size() > 0){
+			for (Map map : smsmap) {
+				ZgSms sms = createSms(map);
+				if(sms != null){
+					smss.add(sms);
+				}
+				zgSmsMapper.insert(sms);
+			}
+		}
+		//批量入库
+//		zgSmsMapper.batchSave(smss);
+		log.info(String.format("saveZgSmss size:%s, costs:%s(s)", smsmap != null ? smsmap.size() : 0, (System.currentTimeMillis() - l1) / 1000));
+	}
+	
+	private ZgSms createSms(Map smsmap){
+		ZgSms sms = null;
+		try {
+			sms = new ZgSms();
+			sms.setId(toStr(smsmap.get("id")));
+			sms.setCollectionTime(toLong(smsmap.get("collection_time")));
+			sms.setCreateTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+			sms.setPhoneNum(toStr(smsmap.get("sms_phonenumber")));
+			sms.setSelfPhoneNum(toStr(smsmap.get("phone")));
+			sms.setSmsBody(toStr(smsmap.get("sms_smsbody")));
+			sms.setSmsDate(toLong(smsmap.get("sms_ldate")));
+			sms.setSmsName(toStr(smsmap.get("sms_name")));
+			sms.setSmsType((int)(long)toLong(smsmap.get("sms_itype")));
+			sms.setUserOnlyId(toStr(smsmap.get("user_only_id")));
+			sms.setRiskContent(toStr(smsmap.get("risk")));
+			sms.setRiskVer("v1");
+			return sms;
+		} catch (Exception e) {
+			log.info(String.format("error convert to sms:%s", smsmap));
+			return null;
+		}
+	}
+	
+	private static Long defaultMinTime = 1469980800000l; //20160801
+	
+	private static Long[] getRange(Long minTime){
+		Long rangMin = minTime == null ? defaultMinTime : minTime; 
+		rangMin++;
+		Long rangeMax ;
+		if(minTime != null){
+			rangeMax = 10*24*3600*1000 + rangMin.longValue(); //一次递增10天
+		}else{
+			rangeMax = System.currentTimeMillis();
+		}
+		return new Long[]{rangMin, rangeMax};
+	}
+	
+	private static String toStr(Object obj){
+		return toStr(obj, "");
+	}
+	
+	private static String toStr(Object obj, String defaultValue){
+		if(obj == null || obj.toString().trim().length() == 0 ){
+			return defaultValue;
+		}
+		return obj.toString().trim();
+	}
+	
+	private static Long toLong(Object obj){
+		return toLong(obj, 0l);
+	}
+	
+	private static Long toLong(Object obj, Long defaultValue){
+		try {
+			return Long.parseLong(toStr(obj, ""));
+		} catch (Exception e) {
+			return defaultValue;
+		}
+		
+	}
+	
+}

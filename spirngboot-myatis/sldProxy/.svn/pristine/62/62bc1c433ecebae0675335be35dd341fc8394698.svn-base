@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/context
+     			http://www.springframework.org/schema/context/spring-context-3.2.xsd
+     			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+     			http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+    			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+     			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+     			http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+
+	<context:component-scan base-package="com.ule.oracle">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<bean id="oracleDataSource" class="com.alibaba.druid.pool.DruidDataSource"  init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${oracle.driverClassName}" />
+		<property name="url" value="${jdbc.financecr-master.url}" />
+		<property name="username" value="${jdbc.financecr-master.username}" />
+		<property name="password" value="${jdbc.financecr-master.password}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="${jdbc.financecr-master.initialSize}" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="${jdbc.financecr-master.maxActive}" />
+		<!-- 连接池最大空闲
+		<property name="maxIdle" value="${jdbc.internet_finance-master.maxIdle}" />-->
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${jdbc.financecr-master.minIdle}" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="60000" />
+	</bean>
+
+	<bean id="txManagerUserOracle" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="oracleDataSource" />
+	</bean>
+
+	<bean id="oracleSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="oracleDataSource" />
+		<property name="configLocation" value="classpath:MyBatis-Configuration.xml" />
+		<property name="mapperLocations" value="classpath*:com/ule/oracle/**/daoxml/*Mapper.xml"></property>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.ule.oracle.**.dao"></property>
+		<property name="sqlSessionFactoryBeanName" value="oracleSqlSessionFactory"></property>
+	</bean>
+
+	<tx:annotation-driven transaction-manager="txManagerUserOracle" />
+		
+</beans>

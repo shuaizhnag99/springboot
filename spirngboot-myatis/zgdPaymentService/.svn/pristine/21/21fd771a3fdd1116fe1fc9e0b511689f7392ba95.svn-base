@@ -1,0 +1,8 @@
+GLOBAL_SERVER=https://i1.ule.com
+UHJ_CSS_SERVER=https://i1.ule.com
+UHJ_SERVER=https://money.ule.com/lendvps
+UHJ_CSS_SERVER_HTTP=http://i1.ule.com
+UZS_STATIC_RESOURCES_HTTP=http://www.ule.com
+UHJ_SERVER_HTTP=http://money.ule.com/lendvps
+#�����������б�
+CP_HELPER_TASK=http://ule.cn/afzgqd

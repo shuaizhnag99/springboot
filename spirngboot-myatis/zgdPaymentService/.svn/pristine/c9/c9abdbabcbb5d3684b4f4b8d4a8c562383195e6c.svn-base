@@ -1,0 +1,23 @@
+
+GLOBAL.CONFIG.SIGN.PATH=/data/postmall/sign_platform
+
+GLOBAL.CONFIG.STATIC.SERVER1=http://i0.beta.ule.com
+GLOBAL.CONFIG.STATIC.SERVER2=http://pic.beta.ule.com
+
+# global PUB server 
+GLOBAL_ULE_PUB_SERVER= pub.beta.ule.com
+
+# global cookie domain
+GLOBAL.COOKIE.DOMAIN=beta.ule.com
+
+ULE.COOKIE.NAME=mall_cookie
+GLOBAL.COOKIE.NAME.USRONLYID=mall_usronlyid
+GLOBAL.COOKIE.NAME.USRLOGINID=mall_loginid
+
+GLOBAL.CONFIG.INDEX.SERVER=http://dg.beta.ule.com
+
+GLOBAL.CONFIG.FEEDBACK.SERVER = http://feedback.beta.ule.com
+
+#AUTH_REGISTER = http://my.beta.ule.com/usr/youxnpRegister.do
+#AUTH_LOGIN = http://my.beta.ule.com/usr/youxnpLogin.do
+#AUTH_LOGOUT = http://my.beta.ule.com/usr/logout.do

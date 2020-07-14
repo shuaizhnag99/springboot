@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ule.uhj.init.dao.AnalysisMapper" >
+  
+  <select id="queryInterfaceId" parameterType="map" resultType="java.lang.String" >
+	select id from ULEAPP_FINANCECR.t_j_interface_access_info i
+ 	 where i.interface_type in ('9102', '4103')
+       and i.status='1'
+       and i.create_time <![CDATA[>]]>#{startDate,jdbcType=VARCHAR}
+     <if test="endDate!=null and endDate!=''">
+       and i.create_time <![CDATA[<]]>#{endDate,jdbcType=VARCHAR}
+     </if>
+       and not exists(
+ 			select 1 from ULEAPP_FINANCECR.t_j_corp_info ci where ci.interface_id=i.id
+ 		)
+  </select>
+  
+  <insert id="saveCropChange" parameterType="java.util.List">
+	  insert into ULEAPP_FINANCECR.t_j_corp_change_info(ID,
+			CORP_ID,
+			CHANE_ITEM,
+			CONTENT_BEFORE,
+			CONTENT_AFTER,
+			CHANGE_TIME,
+			CREATE_TIME,
+			CREATE_USER,
+			UPDATE_TIME,
+			UPDATE_USER,
+			INTERFACE_ID)  
+			select  ULEAPP_FINANCECR.seq_t_j_corp_change_info.nextval, m.* from (
+	<foreach collection="list" item="change" index="index" separator=" union all ">    
+	    select 
+		    id as corpId,
+			#{change.chaneItem,jdbcType=VARCHAR},
+			#{change.contentBefore,jdbcType=VARCHAR},
+			#{change.contentAfter,jdbcType=VARCHAR},
+			#{change.changeTime,jdbcType=TIMESTAMP},
+			#{change.createTime,jdbcType=VARCHAR},
+			#{change.createUser,jdbcType=VARCHAR},
+			#{change.updateTime,jdbcType=VARCHAR},
+			#{change.updateUser,jdbcType=VARCHAR},
+			#{change.interfaceId,jdbcType=VARCHAR} 
+		from ULEAPP_FINANCECR.t_j_corp_info where interface_id=#{change.interfaceId,jdbcType=VARCHAR}
+	</foreach> 
+	) m
+  </insert>
+  
+  <insert id="saveCrop" parameterType="com.ule.uhj.init.modle.CropInfo">
+	  insert into ULEAPP_FINANCECR.t_j_corp_info(id,
+	  					 user_only_id,
+	  					 corp_name,
+	  					 license_no,
+	  					 manager,
+	  					 start_time,
+	  					 corp_address,
+	  					 corp_status,
+	  					 corp_type,
+	  					 create_time,
+	  					 create_user,
+	  					 update_time,
+	  					 update_user,
+	  					 depertment,
+	  					 business_scope,
+	  					 interface_id) 
+	  select ULEAPP_FINANCECR.seq_t_j_corp_info.nextval,
+	  		#{userOnlyId,jdbcType=VARCHAR},
+			#{corpName,jdbcType=VARCHAR},
+			#{licenseNo,jdbcType=VARCHAR},
+			#{manager,jdbcType=VARCHAR},
+			#{startTime,jdbcType=VARCHAR},
+			#{corpAddress,jdbcType=VARCHAR},
+			#{corpStatus,jdbcType=VARCHAR},
+			#{corpType,jdbcType=VARCHAR},
+			#{createTime,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateTime,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			#{depertment,jdbcType=VARCHAR},
+			#{businessScope,jdbcType=VARCHAR},
+			#{interfaceId,jdbcType=VARCHAR} 
+	   from dual
+  </insert>
+</mapper>

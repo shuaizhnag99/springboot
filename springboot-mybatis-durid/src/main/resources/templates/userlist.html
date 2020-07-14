@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body class="container">
+<br/>
+<h1>用户列表</h1>
+<br/><br/>
+<div class="with:80%">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>姓名</th>
+            <th>密码</th>
+            <th>手机号</th>
+            <th>权限等级</th>
+            <th>编辑</th>
+            <th>删除</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr  th:each="user ,var: ${users}">
+            <th scope="row" th:text="${var.count}">id</th>
+            <td th:text="${user.username}">name</td>
+            <td th:text="${user.password}">password</td>
+            <td th:text="${user.mobilephone}">mobilephone</td>
+            <td th:text="${user.permissions}">permissions</td>
+            <td><a th:href="@{/toEdit(id=${user.id},username=${user.username},password=${user.password},permissions=${user.permissions})}">edit</a></td>
+            <td><a th:href="@{/delete(id=${user.id})}">delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+ 
+
+</body>
+</html>

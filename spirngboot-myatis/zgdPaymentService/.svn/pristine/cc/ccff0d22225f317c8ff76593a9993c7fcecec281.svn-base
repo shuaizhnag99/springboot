@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/context
+     			http://www.springframework.org/schema/context/spring-context-3.2.xsd
+     			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+     			http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+    			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+     			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+     			http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+	<context:annotation-config />
+	
+	<context:component-scan base-package="com.ule.uhj.**.service" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+	</context:component-scan>
+	
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+          <property name="locations">
+             <list>
+				<value>classpath:datasource.properties</value>
+				<value>classpath:jdbc2.properties</value>
+			</list>
+          </property>
+     </bean>
+	<bean id="basePropertyPlaceHolder"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+			<property name="ignoreResourceNotFound" value="true" />
+			<property name="properties" ref="configProperties" />
+	</bean>
+	<!-- 	alibaba connection pool -->
+	<bean id="baseDataSource" class="com.alibaba.druid.pool.DruidDataSource"  init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="url" value="${jdbc.financecr-master.url}" />
+		<property name="username" value="${jdbc.financecr-master.username}" />
+		<property name="password" value="${jdbc.financecr-master.password}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="${jdbc.financecr-master.initialSize}" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="${jdbc.financecr-master.maxActive}" />
+		<!-- 连接池最大空闲 
+		<property name="maxIdle" value="${jdbc.financecr-master.maxIdle}" />-->
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${jdbc.financecr-master.minIdle}" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="60000" />
+	</bean>
+
+	<bean id="jdbcTemplate"
+		  class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="baseDataSource" />
+		</property>
+	</bean>
+
+	<bean id="txManagerUser" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="baseDataSource" />
+	</bean>
+	<tx:advice id="txAdvicer" transaction-manager="txManagerUser">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" rollback-for="Throwable" />
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="Throwable" />
+			<tx:method name="merge*" propagation="REQUIRED" rollback-for="Throwable" />
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="Throwable" />
+			<tx:method name="*batch" propagation="REQUIRES_NEW" rollback-for="Exception"/>
+			<tx:method name="*" propagation="SUPPORTS" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:pointcut id="servicePointcut"
+			expression="execution(* com.ule.uhj.*.*.service.impl.*ServiceImpl.*(..)))" />
+		<aop:advisor pointcut-ref="servicePointcut" advice-ref="txAdvicer"/>	
+	</aop:config>
+
+	<!-- define the SqlSessionFactory -->
+	<bean id="sldSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="baseDataSource" />
+		<property name="configLocation" value="classpath:MyBatis-Configuration.xml" />
+		<property name="mapperLocations" value="classpath*:com/ule/uhj/**/daoxml/*Mapper.xml"></property>
+	</bean>
+	
+	<!-- scan mapper -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.ule.uhj.**.dao"></property>
+		<property name="sqlSessionFactoryBeanName" value="sldSqlSessionFactory"></property>
+	</bean>
+
+	<!-- 支持 spring 异步 -->
+	<!-- 创建缺省的异步任务线程池 ，防止堵塞线程 -->
+<!--     <task:executor id="executor" pool-size="10"/> -->
+<!--     <task:scheduler id="scheduler" pool-size="10"/> -->
+<!--     <task:annotation-driven scheduler="scheduler" executor="executor" proxy-target-class="true"/> -->
+	<!-- 全局线程池配置 -->
+<!-- 	<bean id="threadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> -->
+<!-- 		<property name="queueCapacity" value="0"/> -->
+<!-- 	</bean> -->
+</beans>

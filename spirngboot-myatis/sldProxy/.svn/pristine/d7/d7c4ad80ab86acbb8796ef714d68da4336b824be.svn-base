@@ -1,0 +1,23 @@
+package com.ule.uhj.sldProxy.dao;
+import com.ule.uhj.sld.model.TransZx;
+import org.apache.ibatis.annotations.Param;
+
+/**
+ * Created by yfzx-sh-zhengxin on 2016/7/7.
+ */
+public interface TransZxMapper {
+    /***
+     * 查询征信接口缓存
+     * @param custId
+     * @param transCode
+     * @param paramers
+     * @return
+     */
+    TransZx findSimpleTransInfo(@Param("transCode")String transCode,@Param("paramer")String paramers);
+
+    /***
+     * 插入征信缓存
+     * @param transZx
+     */
+    void insert(TransZx transZx);
+}

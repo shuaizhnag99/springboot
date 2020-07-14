@@ -1,0 +1,52 @@
+package com.ule.uhj.sldProxy.service.impl;
+
+import com.ule.uhj.sld.model.TransZx;
+import com.ule.uhj.sldProxy.dao.TransZxMapper;
+import com.ule.uhj.sldProxy.service.TransZxService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Created by yfzx-sh-zhengxin on 2016/7/7.
+ */
+@Service("TransZxService")
+public class TransZxServiceImpl implements TransZxService{
+    @Autowired
+    private TransZxMapper transZxMapper;
+
+    private static final Log log = LogFactory.getLog(TransZxServiceImpl.class);
+
+    /***
+     * 查询征信缓存
+     * @param transCode
+     * @param paramers
+     * @return
+     */
+    @Override
+    public TransZx findTransZxInfo(String transCode,List<Object> paramers){
+        log.info("TransZxServiceImpl类findTransZxInfo方法开始 : transCode="+transCode+",paramers ="+paramers);
+        //开始解析参数
+        StringBuffer paramerBuffer = new StringBuffer();
+        for(Object obj : paramers){
+            paramerBuffer.append(obj.toString()+",");
+        }
+        String paramer = paramerBuffer.toString();
+        if(StringUtils.isNotBlank(paramer)){
+            paramer = paramer.substring(0,paramer.length()-1);
+        }
+        log.info("TransZxServiceImpl类findTransZxInfo方法 ：参数解析完毕，paramer="+paramer);
+        try{
+            TransZx resultModel = transZxMapper.findSimpleTransInfo(transCode,paramer);
+            log.info("TransZxServiceImpl类findTransZxInfo方法 ：结束。resultModel="+resultModel);
+            return resultModel;
+        }catch (Exception e){
+            log.error("TransZxServiceImpl类findTransZxInfo方法 : 数据查询异常！ "+e.getMessage(),e);
+            return null;
+        }
+    }
+}

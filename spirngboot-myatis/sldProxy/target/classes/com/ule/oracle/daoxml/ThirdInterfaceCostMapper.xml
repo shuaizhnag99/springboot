@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ule.oracle.dao.ThirdInterfaceCostMapper">
+    <resultMap id="AllColumnMap" type="com.ule.oracle.model.ThirdInterfaceCost">
+        <result column="id" property="id"/>
+        <result column="user_only_id" property="userOnlyId"/>
+        <result column="charge_source" property="chargeSource"/>
+        <result column="charge_detail" property="chargeDetail"/>
+        <result column="amount" property="amount"/>
+        <result column="remark" property="remark"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+    </resultMap>
+
+    <sql id="all_column">
+        id,
+        user_only_id,
+        charge_source,
+        charge_detail,
+        amount,
+        remark,
+        create_at,
+        create_by,
+        update_at,
+        update_by
+    </sql>
+
+    <insert id="insertSelective">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            select ULEAPP_FINANCECR.SEQ_T_J_THIRD_INTERFACE_COST.nextval from dual
+        </selectKey>
+        INSERT INTO ULEAPP_FINANCECR.T_J_THIRD_INTERFACE_COST
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null"> id,</if>
+            <if test="userOnlyId!=null"> user_only_id,</if>
+            <if test="chargeSource!=null"> charge_source,</if>
+            <if test="chargeDetail!=null"> charge_detail,</if>
+            <if test="amount!=null"> amount,</if>
+            <if test="remark!=null"> remark,</if>
+            create_at,
+            <if test="createBy!=null"> create_by,</if>
+            update_at,
+            <if test="updateBy!=null"> update_by,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">#{id},</if>
+            <if test="userOnlyId!=null">#{userOnlyId},</if>
+            <if test="chargeSource!=null">#{chargeSource},</if>
+            <if test="chargeDetail!=null">#{chargeDetail},</if>
+            <if test="amount!=null">#{amount},</if>
+            <if test="remark!=null">#{remark},</if>
+            sysdate,
+            <if test="createBy!=null">#{createBy},</if>
+            sysdate,
+            <if test="updateBy!=null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <select id="selectUnitPriceByElementKey" resultType="string">
+        SELECT
+        ELEMENT_VALUE
+        FROM ULEAPP_FINANCECR.T_J_DIC
+        WHERE ELEMENT_TYPE = 'third_interface_up'
+        AND ELEMENT_KEY = #{elementKey}
+    </select>
+</mapper>
+
