@@ -1,6 +1,0 @@
-projectKey=com.ule.uhj:zgdPaymentService
-serverUrl=http://sonarqube.uletm.com/sonar
-serverVersion=7.5.0.20543
-dashboardUrl=http://sonarqube.uletm.com/sonar/dashboard?id=com.ule.uhj%3AzgdPaymentService
-ceTaskId=AXMxfjcerRoHTXaFlX5G
-ceTaskUrl=http://sonarqube.uletm.com/sonar/api/ce/task?id=AXMxfjcerRoHTXaFlX5G

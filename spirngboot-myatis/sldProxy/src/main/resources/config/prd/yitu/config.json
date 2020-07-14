@@ -1,7 +1,0 @@
-{
-    "yituIp": "http://api-youle.yitutech.com",
-    "pemPath": "yitu/staging.public.pem",
-    "accessId" : "13068",
-    "accessKey" : "0f5eae9de0cc212eafffb401a8ed0f9a",
-    "userDefinedContent" : "abc"
-}

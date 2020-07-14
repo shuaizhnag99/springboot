@@ -1,6 +1,0 @@
-projectKey=com.ule.uhj:ule.uhjAPIWeb
-serverUrl=http://sonarqube.uletm.com/sonar
-serverVersion=7.5.0.20543
-dashboardUrl=http://sonarqube.uletm.com/sonar/dashboard?id=com.ule.uhj%3Aule.uhjAPIWeb
-ceTaskId=AXMxkj5JrRoHTXaFlX5M
-ceTaskUrl=http://sonarqube.uletm.com/sonar/api/ce/task?id=AXMxkj5JrRoHTXaFlX5M

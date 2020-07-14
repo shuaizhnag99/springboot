@@ -1,1 +1,0 @@
-<jsp:forward page="/framework/user/to_login.do"></jsp:forward>

@@ -1,6 +1,0 @@
-package com.ule.uhj.tmp.service;
-
-public interface ZgSmsService {
-
-	public String saveSyncFromCse();
-}

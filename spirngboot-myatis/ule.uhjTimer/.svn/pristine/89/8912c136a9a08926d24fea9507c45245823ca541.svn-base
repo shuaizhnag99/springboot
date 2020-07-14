@@ -1,9 +1,0 @@
-ifadmin_base=http://uhj-loanRiskControlAudit.http.testing.uledns.com/loanRiskControlAudit
-#ifadmin_base=http://money.beta.ule.com:8081/ifadmin
-lendMerchant_base=http://money.testing.ule.com/lendMerchant
-#lendMerchant_base=http://localhost:8080/lendMerchant
-chinaPost_base=http://money.testing.ule.com/cnpsec
-#chinaPost_base=http://localhost:8080/cnpsec
-lendvps_base=http://uhj-lendvps.http.testing.uledns.com/lendvps
-#the url of ifadmin for send sld message
-sldSMSSenderUrl=http://uhj-loanRiskControlAudit.http.testing.uledns.com/loanRiskControlAudit/sldSmsSender/sldSendMessage.do

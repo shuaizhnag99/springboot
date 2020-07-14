@@ -1,6 +1,0 @@
-ifadmin_base=http://uhj-loanRiskControlAudit.http.prd.uledns.com/loanRiskControlAudit
-lendMerchant_base=http://money.ule.com/lendMerchant
-chinaPost_base=http://money.ule.com/cnpsec
-lendvps_base=http://uhj-lendvps.http.prd.uledns.com/lendvps
-#the url of ifadmin for send sld message
-sldSMSSenderUrl=http://uhj-loanRiskControlAudit.http.prd.uledns.com/loanRiskControlAudit/sldSmsSender/sldSendMessage.do

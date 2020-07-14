@@ -1,2 +1,0 @@
-#org.apache.commons.logging.log=org.apache.commons.logging.impl.Log4JCategoryLog
-org.apache.commons.logging.log=org.apache.commons.logging.impl.Log4JLogger

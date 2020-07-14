@@ -1,7 +1,0 @@
-jdbc.internet_finance-master.url=jdbc:mysql://172.25.201.63:3306/internet_finance?autoReconnect=true&autoReconnectForPools=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
-jdbc.internet_finance-master.username=uleapp_itfin
-jdbc.internet_finance-master.password=itfin.2016!A
-jdbc.internet_finance-master.initialSize=5
-jdbc.internet_finance-master.maxActive=100
-jdbc.internet_finance-master.maxIdle=5
-jdbc.internet_finance-master.minIdle=1
